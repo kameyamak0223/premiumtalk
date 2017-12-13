@@ -12,3 +12,16 @@ try{
 } catch (Exception $ex) {
     error_log(var_export($ex, TRUE));
 }
+
+foreach ($events as $event){
+  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent)) {
+    error_log('Non message event has come');
+    continue;
+  }
+  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage)) {
+    error_log('Non text message has come');
+    continue;
+  }
+  
+  $bot->replyText($event->getReplyToken(), $event->getText());
+}
