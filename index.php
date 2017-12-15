@@ -5,9 +5,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
 
-$signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
-
-try{
+$signature = $_SERVER["HTTP_" . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+try {
   $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
 } catch(\LINE\LINEBot\Exception\InvalidSignatureException $e) {
   error_log("parseEventRequest failed. InvalidSignatureException => ".var_export($e, true));
@@ -28,6 +27,5 @@ foreach ($events as $event){
     error_log('Non text message has come');
     continue;
   }
-  
   $bot->replyText($event->getReplyToken(), $event->getText() . "かよ！");
 }
